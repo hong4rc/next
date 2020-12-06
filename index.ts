@@ -1,7 +1,7 @@
 const minInHour = 60;
 const millisecond = 1000;
 
-interface Input {
+export interface Input {
   hour?: number;
   minute?: number;
   second?: number;
@@ -24,8 +24,8 @@ const isObject = (obj: any) => obj === Object(obj);
 // deno-lint-ignore no-explicit-any
 const validTimezone = (timezone: any) => {
   timezone = timezone ?? defaultTimezone;
-  if (typeof timezone !== 'number') {
-    throw new TypeError('`timezone` must be number');
+  if (typeof timezone !== "number") {
+    throw new TypeError("`timezone` must be number");
   }
   if (Math.abs(timezone) > 12) {
     throw new RangeError(`'timezone' must be >=-12 and <=12`);
@@ -53,19 +53,18 @@ const validNumber = (field: string, num: any, max: number) => {
 // deno-lint-ignore no-explicit-any
 const validInput = (input: any): ValidInput => {
   if (!isObject(input)) {
-    throw new TypeError('`input` must be object');
+    throw new TypeError("`input` must be object");
   }
 
-  const validField = (field: 'hour' | 'minute' | 'second', max: number) => {
+  const validField = (field: "hour" | "minute" | "second", max: number) => {
     return validNumber(field, input[field], max);
   };
-  input = {
-    hour: validField('hour', 23),
-    minute: validField('minute', 59),
-    second: validField('second', 59),
+  return {
+    hour: validField("hour", 23),
+    minute: validField("minute", 59),
+    second: validField("second", 59),
     timezone: validTimezone(input.timezone),
   };
-  return input;
 };
 
 export default (input: Input, now: Date | number = Date.now()) => {
